@@ -1,0 +1,1 @@
+Implementation of a Perceptron usign logistic regression to determine if an "Alien sentence" is happy or sad

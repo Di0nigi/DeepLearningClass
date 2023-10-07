@@ -2,38 +2,48 @@ import numpy as np
 import matplotlib.pyplot as Matplot
 import os
 
-def unit_step(x):
-    ret= np.where(x>0,1,0)
+
+
+def sigmoid_step(x):
+    ret= np.where(x>0.5,1,0)
     return ret
+
+def sigmoid(x):
+    s=(1/(1+np.e**(-x)))
+    return s
 
 def accuracy(y_true, y_pred):
         accuracy = np.sum(y_true == y_pred) / len(y_true)
         return accuracy
 
-class perceptron:
+class logisticPerceptron:
 
     def __init__(self, learning_rates=0.01, n_iters=1000, linear=True):
         self.lr=learning_rates
         self.iters=n_iters
-        self.activation_fun=unit_step
+        self.activation_fun=sigmoid
         self.weights=None
         self.bias=None
+        self.error=0
         return
     def fit(self,X,y):
 
         n_samples, n_features= X.shape
         self.weights= np.zeros(n_features)
         self.bias=0
-        #y_ = np.where(y > 0 , 1, 0)
         
         for i in range(self.iters):
+            self.error=0
             for idx, x_i in enumerate(X):
                 linear_out=np.dot(x_i,self.weights)+ self.bias
                 y_predict=self.activation_fun(linear_out)
+                self.error+=logLoss(y_predict, y[idx])
                 update= self.lr*(y[idx]-y_predict)
-                self.weights+= update*x_i
+                for f in range(len(self.weights)):
+                    self.weights[f]+=update*x_i[f]
                 self.bias+= update
-        return self.bias, self.weights
+            
+        return self.bias, self.weights, self.error
     
     def predict(self,X):
         linear_out=np.dot(X,self.weights)+ self.bias
@@ -45,14 +55,16 @@ def testAccuracy(y_pred, y_actual):
     accuracy =np.sum(y_actual==y_pred)/len(y_actual)
     return accuracy
 
+def logLoss(pred, label):
+    epsilon = 1e-15
+    pred = np.clip(pred, epsilon, 1 - epsilon)
+    i=0
+    i=(-label*np.log(pred) - (1-label)*np.log(1-pred))
+    return i
+
+
 def visualData(mat,ylist, perceptron):
-    # xPoints= [x[0] for x in mat]
-    # yPoints= [y[1] for y in mat]
-    # Matplot.scatter(xPoints,yPoints)
-    # Matplot.xlabel('meep')
-    # Matplot.ylabel('morp')
-    # Matplot.title('Data')
-    # Matplot.show()
+    
     fig = Matplot.figure()
     ax = fig.add_subplot(1, 1, 1)
     Matplot.scatter(mat[:, 0], mat[:, 1], marker="o", c=ylist)
@@ -112,26 +124,28 @@ def unlabelData(l):
 
 
 def main():
-    trainDataList, trainLabelList = unlabelData(dataParser(os.path.join(os.getcwd(),"PerceptronAlgo\data\dataBatch1.txt")))
+    trainDataList, trainLabelList = unlabelData(dataParser(os.path.join(os.getcwd(),"LogisticRegressionAlgo\data\dataBatch1.txt")))
 
-    testDataList, testLabelList= unlabelData(dataParser(os.path.join(os.getcwd(),"PerceptronAlgo\data\dataBatch.txt")))
+    testDataList, testLabelList= unlabelData(dataParser(os.path.join(os.getcwd(),"LogisticRegressionAlgo\data\dataBatch.txt")))
 
     trainData= makePoints(trainDataList)
 
     testData= makePoints(testDataList)
 
-    P = perceptron(learning_rates=0.001, n_iters=10000)
+    Lp = logisticPerceptron(learning_rates=0.001, n_iters=10000)
 
-    tup=P.fit(trainData,trainLabelList)
+    tup=Lp.fit(trainData,trainLabelList)
 
-    predictions= P.predict(testData)
+    predictions= Lp.predict(testData)
 
-    accuracy=testAccuracy(predictions,testLabelList)
+    accuracy=testAccuracy(sigmoid_step(predictions),testLabelList)
+    
     print(tup)
     print(accuracy)
+    print(predictions[-10:-1])
     
 
-    visualData(trainData, trainLabelList, P)
+    visualData(trainData, trainLabelList, Lp)
     
     return "done"
 

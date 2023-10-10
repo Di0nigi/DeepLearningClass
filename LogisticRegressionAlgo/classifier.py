@@ -24,6 +24,7 @@ class logisticPerceptron:
         self.activation_fun=sigmoid
         self.weights=None
         self.bias=None
+        self.errors=[]
         self.error=0
         return
     def fit(self,X,y):
@@ -42,6 +43,7 @@ class logisticPerceptron:
                 for f in range(len(self.weights)):
                     self.weights[f]+=update*x_i[f]
                 self.bias+= update
+            self.errors.append(self.error)
             
         return self.bias, self.weights, self.error
     
@@ -62,6 +64,15 @@ def logLoss(pred, label):
     i=(-label*np.log(pred) - (1-label)*np.log(1-pred))
     return i
 
+def plotErrors(l):
+    Matplot.plot(l, [x for x in range(len(l))])
+    Matplot.xlabel('iterations')
+    Matplot.ylabel('logloss')
+    Matplot.title('error')
+
+    Matplot.show()
+
+    return
 
 def visualData(mat,ylist, perceptron):
     
@@ -146,6 +157,7 @@ def main():
     
 
     visualData(trainData, trainLabelList, Lp)
+    plotErrors(Lp.errors)
     
     return "done"
 

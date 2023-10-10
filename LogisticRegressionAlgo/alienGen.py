@@ -29,7 +29,7 @@ def gen(num):
                 s+=1
         
         
-        if h/l>=0.3 and h > 5:
+        if h/l>=0.6 and h > 2:
             a=Alien(b,"happy")
         else:
             a=Alien(b,"sad")
@@ -49,7 +49,7 @@ def save(list, file):
     return
 
 def main():
-    aliensList=gen(100)
-    save(aliensList,(os.path.join(os.getcwd(),"LogisticRegressionAlgo\data\dataBatch.txt")))
+    aliensList=gen(1000)
+    save(aliensList,(os.path.join(os.getcwd(),"LogisticRegressionAlgo\data\dataBatch1.txt")))
 
 main()

@@ -7,6 +7,9 @@ import os
 def sigmoid_step(x):
     ret= np.where(x>0.5,1,0)
     return ret
+def reluF(x):
+    ret= np.where(x>0,x,0)
+    return ret
 
 def sigmoid(x):
     s=(1/(1+np.e**(-x)))
@@ -18,10 +21,13 @@ def accuracy(y_true, y_pred):
 
 class logisticPerceptron:
 
-    def __init__(self, learning_rates=0.01, n_iters=1000, linear=True):
+    def __init__(self, learning_rates=0.01, n_iters=1000, linear=True, relu=False):
         self.lr=learning_rates
         self.iters=n_iters
-        self.activation_fun=sigmoid
+        if relu:
+            self.activation_fun=reluF
+        else:
+            self.activation_fun=sigmoid
         self.weights=None
         self.bias=None
         self.errors=[]
@@ -143,7 +149,7 @@ def main():
 
     testData= makePoints(testDataList)
 
-    Lp = logisticPerceptron(learning_rates=0.001, n_iters=10000)
+    Lp = logisticPerceptron(learning_rates=0.001, n_iters=10000, relu=False)
 
     tup=Lp.fit(trainData,trainLabelList)
 

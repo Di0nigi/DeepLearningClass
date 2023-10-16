@@ -80,6 +80,10 @@ class Perceptron:
     
 
 
+
+
+
+
 #######################################testing stuff
 def testAccuracy(y_pred, y_actual):
     accuracy =np.sum(y_actual==y_pred)/len(y_actual)

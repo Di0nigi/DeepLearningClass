@@ -50,6 +50,6 @@ def save(list, file):
 
 def main():
     aliensList=gen(100)
-    save(aliensList,(os.path.join(os.getcwd(),"LogisticRegressionAlgo\data\dataBatch.txt")))
+    save(aliensList,(os.path.join(os.getcwd(),"LogisticRegressionAlgo\data\dataBatch1.txt")))
 
 main()

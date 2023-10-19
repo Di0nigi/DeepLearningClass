@@ -13,6 +13,10 @@ def sigmoid_step(x):
     ret= np.where(x>0.5,1,0)
     return ret
 
+def reluF(x):
+    ret= np.where(x>0,x,0)
+    return ret
+
 class Perceptron:
 
     def __init__(self, learning_rates=0.01, n_iters=1000):
@@ -38,10 +42,10 @@ class Perceptron:
 
         if self.weights==None:
             self.weights= np.random.random(n_features)
-        print(self.weights)
+        #print(self.weights)
         if self.bias==None:
             self.bias=rand.random()
-        print(self.bias)
+        #print(self.bias)
         
         
         for i in range(self.iters):
@@ -77,6 +81,16 @@ class Perceptron:
         self.weights=l
         self.bias=b
         return
+
+class biasPerceptron():
+    def __init__(self,bias=1):
+        self.b=bias
+        return
+    def fit(self):
+        return self.b
+    def predict(self):
+        return
+    
     
 
 

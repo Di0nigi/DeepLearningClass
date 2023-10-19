@@ -20,12 +20,18 @@ class ForwardPassNN:
         for elem in range(self.hidden):
             layer=[]
             for i in range(self.NperL[elem]):
-                pn=p.Perceptron(self.ln,self.it)
+                pn=p.Perceptron(self.ln,1)
                 layer.append(pn)
+            bias=p.biasPerceptron(1)
+            layer.append(bias)
             self.neurons.append(layer)
         return
     def passForward(self,layer1,layer2):
-        return
+
+        return layer2
     def train(self):
         return
+    
+
+
     

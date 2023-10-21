@@ -41,7 +41,7 @@ class Perceptron:
 
 
         if self.weights==None:
-            self.weights= np.random.random(n_features)
+            self.weights= np.random.random(n_features) * 0.01
         #print(self.weights)
         if self.bias==None:
             self.bias=rand.random()

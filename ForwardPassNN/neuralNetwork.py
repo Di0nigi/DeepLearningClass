@@ -8,9 +8,20 @@ def sigmoid(x):
     s=(1/(1+np.e**(-x)))
     return s
 
+def Dsigmoid(x):
+    sx = sigmoid(x)
+    return sx * (1 - sx)
+
 def reluF(x):
     ret= np.where(x>0,x,0)
     return ret
+
+def logLoss(pred, label):
+    epsilon = 1e-15
+    pred = np.clip(pred, epsilon, 1 - epsilon)
+    i=0
+    i=(-label*np.log(pred) - (1-label)*np.log(1-pred))
+    return i
 
 
 class ForwardPassNN:
@@ -25,6 +36,7 @@ class ForwardPassNN:
         self.NperL=distribution
         self.connectionWeights=[]
         self.biases=[]
+        self.error=[]
         return
     def initParam(self,size):
         self.connectionWeights.append(np.random.randn(size, self.NperL[0]) * 0.01)
@@ -41,28 +53,41 @@ class ForwardPassNN:
         return
     def forwardPass(self,Data):
         results=[]
+        vanillaOut=[]
         #first step
         out=np.dot(Data, self.connectionWeights[0]) + self.biases[0]
+        vanillaOut.append(out)
         actOut=self.act(out)
         for ind in range(self.hidden):
             out=np.dot(actOut,self.connectionWeights[ind+1])+self.biases[ind+1]
+            vanillaOut.append(out)
             actOut=self.act(out)
             results.append(actOut)
-        return results
-    def backP(self,pred,labels):
-        mse=0
+        return results, vanillaOut
+    def backP(self,pred,vanilla,labels):
+        error=0
+        mg=0
         gradients=[]
+        dloss_dweights = [None] * len(self.connectionWeights)
+        dloss_dbiases = [None] * len(self.biases)
 
         for ind,elem in enumerate(pred):
-            gradients.append((labels[ind]-elem)*2)
-        #mse=mse/len(pred)
+            error+= logLoss(elem-labels[ind])
+            g=(labels[ind]-elem)*2
+            mg+=g
+            gradients.append(g)
+        mg=mg/len(pred)
+        for i in reversed(range(len(self.connectionWeights))):
+             # Gradient of the loss w.r.t. weights and biases
+            dloss_dweights[i] = np.dot(vanilla[i].T, gradients)
+            dloss_dbiases[i] = np.sum(gradients, axis=0)  # Sum across the mini-batch
 
-
-
-
-
-
-        return
+            gradients = np.dot(gradients, self.connectionWeights[i].T)
+            #if i != 0:
+            gradients *= Dsigmoid(vanilla[i])
+        self.error.append(error)
+        return dloss_dweights, dloss_dbiases
+        
     def errorFun():
         return
     def train(self,data):
@@ -90,17 +115,16 @@ class ForwardPassNN:
                 stInd+=int(size)
             #training
             pred=self.forwardPass(miniBatch)
-            self.backP(pred[-1],lminiBatch)
-            pass
+            D=self.backP(pred[0][-1],pred[1][-1],lminiBatch)
 
-        
+            for i in range(len(self.connectionWeights)):
+                self.connectionWeights[i] -= self.ln * D[0][i]
+                self.biases[i] -= self.ln * D[1][i]
 
+        return self.connectionWeights, self.biases 
+    
+    def predict(self,data):
 
-
-
-
-        return
-    def predict(self):
         return
     def save(self):
         return

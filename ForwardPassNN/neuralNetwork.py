@@ -1,5 +1,4 @@
 import numpy as np
-#import perceptronV2 as p
 import random as rand
 import matplotlib.pyplot as Matplot
 import os
@@ -24,7 +23,7 @@ def logLoss(pred, label):
     return i
 
 
-class ForwardPassNN:
+class FeedForwardNN:
     def __init__(self, hlayers,distribution,learning_rates=0.01,epochs=10000,func=sigmoid):
         self.act=func
         self.loaded=False
@@ -124,84 +123,15 @@ class ForwardPassNN:
         return self.connectionWeights, self.biases 
     
     def predict(self,data):
-
-        return
-    def save(self):
-        return
-    def load(self):
-        return
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''class ForwardPassNNDEP:
-    
-    def __init__(self, hlayers,distribution,learning_rates=0.01,epochs=10000):
-        self.it=epochs
-        self.ln=learning_rates
-        self.hidden=hlayers
-        self.neurons=[]
-        self.outPuts=[]
-        #self.out=p.Perceptron(learning_rates=self.ln,n_iters=1)
-        self.NperL=distribution
-        self.connectionWeights=[]
-        self.initP()
-        return
-    
-    def initP(self):
-        for elem in range(self.hidden):
-            layer=[]
-            weights=[]
-            for i in range(self.NperL[elem]):
-                if elem!= (self.hidden-1):
-                    weights=np.random.randn(self.NperL[elem], self.NperL[elem+1]) * 0.01
-                pn=p.Perceptron(learning_rates=self.ln,n_iters=1)
-                layer.append(pn)
-            bias=p.biasPerceptron(1)
-            layer.append(bias)
-            self.neurons.append(layer)
-            self.connectionWeights.append(weights)
-        return
-    
-    def passForward(self,Data):
-        passForwardData=[]
-        for indL,l in enumerate(self.neurons):
-            for indP,p in enumerate(l):
-                p.fit(Data[0],Data[1])
-
-
-
-
-
-
-
-        return
-    def backPropagation(self):
-        return
-    def train(self, data):
-        for it in range(self.it):
-
-            self.outputs=self.passForward(data)
-            self.backPropagation()
-            pass
-        return
-    def predict(self):
-        return
-    
-
-
-    '''
+        pred=self.forwardPass(data)
+        return pred
+    def save(self,name):
+        os.mkdir(name)
+        np.savez(os.path.join(name,f"{name}weights.npz"), self.connectionWeights)
+        np.savez(os.path.join(name,f"{name}biases.npz"), self.biases)
+        return True
+    def load(self,path):
+        l=os.listdir(path)
+        w=np.load(l[0])
+        b=np.load(l[1])
+        return w,b

@@ -84,6 +84,20 @@ def unlabelData(l):
     normalizedLabel=np.array([0 if x[1]== "sad" else 1 for x in l])
     return unLabeled, normalizedLabel
 
+def showData(data,labels):
+    fig = Matplot.figure()
+    ax = fig.add_subplot(1, 1, 1)
+    data=np.array(data)
+    Matplot.scatter(data[:, 0], data[:, 1], marker="o", c=labels)
+    Matplot.xlabel('meep')
+    Matplot.ylabel('morp')
+    Matplot.title('Data')
+
+    Matplot.show()
+
+
+    return
+
 
 
 def main():
@@ -95,21 +109,23 @@ def main():
 
     testData= makePoints(testDataList)
 
-    Fn= nn.FeedForwardNN()
+    Fn= nn.FeedForwardNN(2,[2,1])
 
-    tup=Fn.fit(trainData,trainLabelList)
+    #showData(trainData,trainLabelList)
 
-    predictions= Fn.predict(testData)
+    tup=Fn.train([trainData,trainLabelList])
 
-    accuracy=testAccuracy(sigmoid_step(predictions),testLabelList)
+    predictions= Fn.predict(testData)[0]
+
+    accuracy=testAccuracy(nn.sigmoid_step(predictions),testLabelList)
     
     print(tup)
     print(accuracy)
-    #print(predictions[-10:-1])
+    print(predictions[-10:-1])
     
 
-    visualData(trainData, trainLabelList, Lp)
-    plotErrors(Lp.errors)
+    #visualData(trainData, trainLabelList, Lp)
+    plotErrors(Fn.error)
     
     return "done"
 

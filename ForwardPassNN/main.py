@@ -101,6 +101,7 @@ def showData(data,labels):
 
 
 def main():
+    #data uploading and parsing from alienGen.py 
     trainDataList, trainLabelList = unlabelData(dataParser(os.path.join(os.getcwd(),"ForwardPassNN\data\dataBatch1.txt")))
 
     testDataList, testLabelList= unlabelData(dataParser(os.path.join(os.getcwd(),"ForwardPassNN\data\dataBatch.txt")))
@@ -109,23 +110,27 @@ def main():
 
     testData= makePoints(testDataList)
 
+    #init network
     Fn= nn.FeedForwardNN(2,[2,1])
 
-    #showData(trainData,trainLabelList)
+    #plot data
+    showData(trainData,trainLabelList)
 
+    #training
     tup=Fn.train([trainData,trainLabelList])
 
     predictions= Fn.predict(testData)[0]
-
+    
+    #accuracy testing
     accuracy=testAccuracy(nn.sigmoid_step(predictions),testLabelList)
     
     print(tup)
     print(accuracy)
-    print(predictions[-10:-1])
+    #print(predictions[-10:-1])
     
 
     #visualData(trainData, trainLabelList, Lp)
-    plotErrors(Fn.error)
+    #plotErrors(Fn.error)
     
     return "done"
 

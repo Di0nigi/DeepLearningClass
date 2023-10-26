@@ -49,7 +49,7 @@ def save(list, file):
     return
 
 def main():
-    aliensList=gen(1000)
-    save(aliensList,(os.path.join(os.getcwd(),"ForwardPassNN\data\dataBatch1.txt")))
+    aliensList=gen(100)
+    save(aliensList,(os.path.join(os.getcwd(),"ForwardPassNN\data\dataBatch.txt")))
 
 main()

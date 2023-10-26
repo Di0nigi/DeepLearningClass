@@ -124,7 +124,7 @@ class FeedForwardNN:
         dlossBiases = [None] * len(self.biases)
 
         for ind,elem in enumerate(pred):
-            error+= logLoss(elem,labels[ind])
+            #error+= logLoss(elem,labels[ind])
             g=(labels[ind]-elem)*2
             mg+=g
             gradients.append(g)
@@ -147,7 +147,7 @@ class FeedForwardNN:
             self.N+=1
             
             gradients *= Dsigmoid(vanilla[i])
-        self.error.append(error)
+        #self.error.append(error)
         return dlossWeights, dlossBiases
         
     def train(self,data):

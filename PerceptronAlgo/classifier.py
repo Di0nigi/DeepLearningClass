@@ -19,6 +19,7 @@ class perceptron:
         self.weights=None
         self.bias=None
         return
+    
     def fit(self,X,y):
 
         n_samples, n_features= X.shape

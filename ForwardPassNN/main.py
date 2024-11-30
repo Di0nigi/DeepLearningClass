@@ -1,7 +1,7 @@
 import matplotlib.pyplot as Matplot
 import numpy as np
 import os
-import neuralNetwork as nn
+import ForwardPassNN.neuralNetworkOLD as nn
 
 
 
@@ -110,7 +110,7 @@ def main():
 
     testData= makePoints(testDataList)
 
-    #init network
+    ''' #init network
     Fn= nn.FeedForwardNN(2,[2,1])
 
     #plot data
@@ -130,7 +130,7 @@ def main():
     
 
     #visualData(trainData, trainLabelList, Lp)
-    #plotErrors(Fn.error)
+    #plotErrors(Fn.error)'''
     
     return "done"
 

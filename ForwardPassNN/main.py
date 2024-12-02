@@ -1,7 +1,8 @@
 import matplotlib.pyplot as Matplot
 import numpy as np
 import os
-import ForwardPassNN.neuralNetworkOLD as nn
+#import ForwardPassNN.neuralNetworkOLD as nn
+from NeuralNetwork import FeedForwardNN  as nn
 
 
 
@@ -107,8 +108,14 @@ def main():
     testDataList, testLabelList= unlabelData(dataParser(os.path.join(os.getcwd(),"ForwardPassNN\data\dataBatch.txt")))
 
     trainData= makePoints(trainDataList)
+    #print(trainData)
 
     testData= makePoints(testDataList)
+
+    N = nn([3,3,2],[2,1],learningRate=0.01,epochs=10,initWeights="zero")
+    p=N.train([trainData,trainLabelList])
+    print(p)
+
 
     ''' #init network
     Fn= nn.FeedForwardNN(2,[2,1])

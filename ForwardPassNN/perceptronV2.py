@@ -189,7 +189,7 @@ def main():
 
     testData= makePoints(testDataList)
 
-    Lp = Perceptron(learning_rates=0.001, n_iters=10000)
+    Lp = Perceptron(learning_rates=0.001, n_iters=1000)
 
     tup=Lp.fit(trainData,trainLabelList)
 
